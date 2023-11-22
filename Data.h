@@ -33,13 +33,13 @@ void Data::organize() {
 	string sfAddModYear, foundationYearAcq;
 	int numMacros = 0;
 
-	regex numbers = regex("^[0-9]$");
-	regex letters = regex("^[A-Za-z]:$");
+	regex numbers = regex("[0-9]");
+	regex letters = regex("[A-Za-z]");
 
 	getline(file, temp);
 	getline(file, temp);
 	getline(file, temp);
-	while(!file.eof()) {
+	for (int i = 0; i < 122330; i++) {
 		getline(file, ingredientCode, ',');
 		getline(file, ingredientDescrip, ',');
 		getline(file, nutrientCode, ',');
@@ -68,7 +68,7 @@ void Data::organize() {
 			macros.insert(nutrientDescrip);
 			numMacros++;
 		}
+		cout << ingredientDescrip << " " << nutrientDescrip << " " << nutrientVal << endl;
 		ingredients[ingredientDescrip].push_back(make_pair(nutrientDescrip, stoi(nutrientVal)));
 	}
-	cout << ingredients.size();
 }
