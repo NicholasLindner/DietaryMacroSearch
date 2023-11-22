@@ -19,4 +19,20 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="2019-2020 FNDDS At A Glance - Ingredient Nutrient Values.xlsx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="2019-2020-FNDDS-At-A-Glance-Ingredient-Nutrient-Values.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
