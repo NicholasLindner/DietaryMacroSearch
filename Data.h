@@ -82,7 +82,6 @@ vector<string> Data::heapSort(string firstMacro, string secondMacro = "None", st
 	vector<string> result;
 	
 	string* heap{new string[1882]};
-	int size = 1882;
 	int numInserted = 0;
 	int index = 0;
 	int parent = floor((index - 1) / 2);
@@ -95,10 +94,12 @@ vector<string> Data::heapSort(string firstMacro, string secondMacro = "None", st
 		parent = floor((index - 1) / 2);
 		heap[index] = i.first;
 		string parentIngredient = heap[parent];
+
 		while (index > -1 && heap[parent] == "" ? true : i.second[indexFirst] > ingredients[parentIngredient][indexFirst]) {
 			string temp = heap[parent];
 			heap[parent] = heap[index];
 			heap[index] = temp;
+
 			index = parent;
 			parent = floor((index - 1) / 2);
 			parentIngredient = heap[parent];
@@ -106,7 +107,6 @@ vector<string> Data::heapSort(string firstMacro, string secondMacro = "None", st
 		numInserted++;
 	}
 	for (int i = 0; i < 20; i++) {
-		cout << heap[i] << endl;
 		result.push_back(heap[i]);
 	}
 	return result;
