@@ -19,7 +19,7 @@ public:
 	Data() {}
 	Data(string filename);
 	void organizeData();
-	vector<string> heapSort(string firstMacro, string secondMacro, string noMacro);
+	vector<string> heapSort(string firstMacro, string noMacro);
 };
 
 Data::Data(string filename) {
@@ -73,86 +73,76 @@ void Data::organizeData() {
 		ingredients[ingredientDescrip].push_back(stof(nutrientVal));
 		//cout << ingredientDescrip << " " << macros[ingredients[ingredientDescrip].size() - 1] << " " << nutrientVal << endl;
 	}
-
 }
 
-vector<string> Data::heapSort(string firstMacro, string secondMacro = "None", string noMacro = "None") {
+vector<string> Data::heapSort(string firstMacro, string noMacro = "None") {
 	string* heap{ new string[1882] };
 	int size = 0;
-	int indexInserting = 0;
-	int parent = floor((indexInserting - 1) / 2.0);
+	int indexBuild = 0;
+	int parent = floor((indexBuild - 1) / 2.0);
 	int indexMacro = find(macros.begin(), macros.end(), firstMacro) - macros.begin();
-	cout << indexMacro;
 
-	//build and insert into the heap
+	//build and insert into heap
 	for (auto i : ingredients) {
-		indexInserting = size;
-		heap[indexInserting] = i.first;
-		parent = floor((indexInserting - 1) / 2.0);
+		indexBuild = size;
+		heap[indexBuild] = i.first;
+		parent = floor((indexBuild - 1) / 2.0);
 
-		//heap[parent] == "" ? false : 
-		while (parent > -1 && ingredients[heap[indexInserting]][indexMacro] > ingredients[heap[parent]][indexMacro]) {
-			//swap(heap[parent], heap[indexInserting]);
-
+		while (parent > - 1 && ingredients[heap[indexBuild]][indexMacro] > ingredients[heap[parent]][indexMacro]) {
 			string temp = heap[parent];
-			heap[parent] = heap[indexInserting];
-			heap[indexInserting] = temp;
+			heap[parent] = heap[indexBuild];
+			heap[indexBuild] = temp;
 
-			indexInserting = parent;
-			parent = floor((indexInserting - 1) / 2.0);
+			indexBuild = parent;
+			parent = floor((indexBuild - 1) / 2.0);
 		}
 		size++;
 	}
 	/*for (int i = 0; i < 1882; i++) {
-		cout << heap[i] << " " << ingredients[heap[i]][indexMacro] << endl;
+		cout << i << " " << heap[i] << " " << ingredients[heap[i]][indexMacro] << endl;
 	}*/
-
 	vector<string> result;
-	int indexRemoving = 0;
-	int left = (2 * indexRemoving) + 1;
-	int right = (2 * indexRemoving) + 2;
+	int indexExtract = 0;
+	int left = (2 * indexExtract) + 1;
+	int right = (2 * indexExtract) + 2;
 	int indexNoMacro;
 	noMacro == "None" ? indexNoMacro = -1 : indexNoMacro = find(macros.begin(), macros.end(), noMacro) - macros.begin();
-	while (size > 0) {
-		indexRemoving = 0;
-		left = (2 * indexRemoving) + 1;
-		right = (2 * indexRemoving) + 2;
-		result.push_back(heap[0]);
+	
+	//extract max from heap
+	while (size > - 1) {
+		if (noMacro == "None" || ingredients[heap[0]][indexNoMacro] == 0.00) {
+			result.push_back(heap[0]);
+		}
+		if (size == 0) { break; }
 
-		heap[indexRemoving] = heap[size - 1];
-		heap[size - 1] = "";
+		indexExtract = 0, left = 1, right = 2;
+		heap[indexExtract] = heap[size - 1];
 		size--;
-		while ((right < size) && (ingredients[heap[indexRemoving]][indexMacro] < ingredients[heap[left]][indexMacro]) && (ingredients[heap[indexRemoving]][indexMacro] < ingredients[heap[right]][indexMacro])) {
-			if (ingredients[heap[left]][indexMacro] > ingredients[heap[right]][indexMacro]) {
-				//swap(heap[left], heap[indexRemoving]);
 
+		while (right < size && (ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[left]][indexMacro] || ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[right]][indexMacro])) {
+			if (ingredients[heap[left]][indexMacro] > ingredients[heap[right]][indexMacro]) {
 				string temp = heap[left];
-				heap[left] = heap[indexRemoving];
-				heap[indexRemoving] = temp;
-				indexRemoving = left;
+				heap[left] = heap[indexExtract];
+				heap[indexExtract] = temp;
+				indexExtract = left;
 			}
 			else {
-				//swap(heap[right], heap[indexRemoving]);
-
 				string temp = heap[right];
-				heap[right] = heap[indexRemoving];
-				heap[indexRemoving] = temp;
-				indexRemoving = right;
+				heap[right] = heap[indexExtract];
+				heap[indexExtract] = temp;
+				indexExtract = right;
 			}
-			left = (2 * indexRemoving) + 1;
-			right = (2 * indexRemoving) + 2;
+			left = (2 * indexExtract) + 1;
+			right = (2 * indexExtract) + 2;
 		}
-		if (right == size && ingredients[heap[indexRemoving]][indexMacro] < ingredients[heap[left]][indexMacro]) {
-			//swap(heap[left], heap[indexRemoving]);
-
+		if (right == size && ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[left]][indexMacro]) {
 			string temp = heap[left];
-			heap[left] = heap[indexRemoving];
-			heap[indexRemoving] = temp;
+			heap[left] = heap[indexExtract];
+			heap[indexExtract] = temp;
 		}
 	}
-	for (int i = 0; i < 500; i++) {
-		//ingredients[result[i]][indexNoMacro]
-		cout << result[i] << " " << ingredients[result[i]][indexMacro] << " " << endl;
-	}
+	/*for (int i = 0; i < 200; i++) {
+		cout << result[i] << " " << ingredients[result[i]][indexMacro] << " " << ingredients[result[i]][0] << endl;
+	}*/
 	return result;
 }
