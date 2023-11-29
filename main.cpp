@@ -10,7 +10,7 @@ int main() {
 
     Data data("2019-2020-FNDDS-At-A-Glance-Ingredient-Nutrient-Values.csv");
     data.organizeData();
-    data.heapSort("Carbohydrate", "hi", "Protein");
+    data.heapSort("Carbohydrate");
 
     sf::Font font;
     if (!font.loadFromFile("font.ttf")) {
