@@ -13,13 +13,18 @@ using namespace std;
 
 class Data {
 	ifstream file;
-	vector<string> macros;
-	map < string, vector <float>> ingredients;
+	vector<string> macros; // name of each macro (corresponds accrodingly to float vector's index)
+	map <string, vector <float>> ingredients; // name of ingredient, vector of amount of ingredient
 public:
 	Data() {}
 	Data(string filename);
 	void organizeData();
 	vector<string> heapSort(string firstMacro, string noMacro);
+
+	vector<pair<string, float>> mergeSort(string chosenMacro, string noMacro); 
+	void mergeSortHelper(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
+	void merge(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int mid, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
+
 };
 
 Data::Data(string filename) {
@@ -75,12 +80,12 @@ void Data::organizeData() {
 	}
 }
 
-vector<string> Data::heapSort(string firstMacro, string noMacro = "None") {
+vector<string> Data::heapSort(string chosenMacro, string noMacro = "None") {
 	string* heap{ new string[1882] };
 	int size = 0;
 	int indexBuild = 0;
 	int parent = floor((indexBuild - 1) / 2.0);
-	int indexMacro = find(macros.begin(), macros.end(), firstMacro) - macros.begin();
+	int indexMacro = find(macros.begin(), macros.end(), chosenMacro) - macros.begin();
 
 	//build and insert into heap
 	for (auto i : ingredients) {
@@ -141,8 +146,108 @@ vector<string> Data::heapSort(string firstMacro, string noMacro = "None") {
 			heap[indexExtract] = temp;
 		}
 	}
-	/*for (int i = 0; i < 200; i++) {
+	/*for (int i = 0; i < 20; i++) {
 		cout << result[i] << " " << ingredients[result[i]][indexMacro] << " " << ingredients[result[i]][0] << endl;
-	}*/
+	}
+	cout << endl;
+	cout << endl;
+	cout << endl;*/
+	
 	return result;
+}
+
+// Sorts the ingredients with merge sort based on how much of each ingredient is wanted (and which one is unwanted)
+vector<pair<string, float>> Data::mergeSort(string chosenMacro, string noMacro = "None") {
+
+	int indexMacro = find(macros.begin(), macros.end(), chosenMacro) - macros.begin(); // finds index of the chosen macro
+	vector<pair<string, float>> ingredientChosenMacroPairsVec; // vector of pairs that contain each ingredient and the amount of the chosen macro that they contain
+
+	int indexUnwantedMacro; 
+	noMacro == "None" ? indexUnwantedMacro = -1 : indexUnwantedMacro = find(macros.begin(), macros.end(), noMacro) - macros.begin(); // finds the index of the unwanted ingredient, if there is one chosen
+
+	// iterates through all the ingredients and assigns a pair of the ingredient name and how much of the chosen macro there is contained, and pushes this pair to a vector
+	for (const auto& i : ingredients) {
+		float macroValue = ingredients[i.first][indexMacro];
+		if (indexUnwantedMacro != -1) { // If there is an unwanted macro in an ingredient, then if only pushes that ingredient DOES NOT contain the unwanted macro
+			float unwantedMacroValue = ingredients[i.first][indexUnwantedMacro];
+			if (unwantedMacroValue == 0.f) {
+				ingredientChosenMacroPairsVec.push_back({ i.first, macroValue });
+			}
+		}
+		else {
+			ingredientChosenMacroPairsVec.push_back({ i.first, macroValue });
+		}
+	}
+
+	int left = 0;
+	int right = ingredientChosenMacroPairsVec.size() - 1;
+
+	// Calls the actual sorting mergesort algorithm 
+	mergeSortHelper(ingredientChosenMacroPairsVec, left, right);
+
+	/*for (int i = 0; i < 20; i++) {
+		cout << ingredientChosenMacroPairsVec[i].first << " " << ingredientChosenMacroPairsVec[i].second << " "  << endl;
+	}*/
+
+	return ingredientChosenMacroPairsVec;
+}
+
+// Mergesort code (with recursion). NOTE: BASED OFF THE PROFESSOR'S MERGE SORT CODE FROM THE MODULE 6 SLIDES
+void Data::mergeSortHelper(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int right) {
+
+	// Check if the cur segment of the vector > 1 element
+	if (left < right) {
+		int mid = left + (right - left) / 2; // Splits the vector into 2 at "mid" index
+		mergeSortHelper(ingredientChosenMacroPairsVec, left, mid); // recursivily mergesorts the left subvector
+		mergeSortHelper(ingredientChosenMacroPairsVec, mid + 1, right); // recursivily mergesorts the right sub vector
+		merge(ingredientChosenMacroPairsVec, left, mid, right); //now the subvectors are sorted so we merge them
+	}
+}
+
+// code for merging the subvectors  NOTE: BASED OFF THE PROFESSOR'S MERGE SORT CODE FROM THE MODULE 6 SLIDES
+void Data::merge(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int mid, int right) {
+
+	int len1 = mid - left + 1;
+	int len2 = right - mid;
+
+	// create sub vectors
+	vector<pair<string, float>> leftSubvector(len1);
+	vector<pair<string, float>> rightSubvector(len2);
+
+	// transfer the data to the subvectors
+	for (int i = 0; i < len1; i++) {
+		leftSubvector[i] = ingredientChosenMacroPairsVec[left + i];
+	}
+	for (int j = 0; j < len2; j++) {
+		rightSubvector[j] = ingredientChosenMacroPairsVec[mid + 1 + j];
+	}
+
+	int i = 0;
+	int j = 0;
+	int k = left;
+
+	// merging the subvecs back into ingredientChosenMacroPairsVec
+	while (i < len1 && j < len2) {
+		if (leftSubvector[i].second >= rightSubvector[j].second) {
+			ingredientChosenMacroPairsVec[k] = leftSubvector[i];
+			i++;
+		}
+		else {
+			ingredientChosenMacroPairsVec[k] = rightSubvector[j];
+			j++;
+		}
+		k++;
+	}
+	// copy any remaining values from left subvector to the merged vector
+	while (i < len1) {
+		ingredientChosenMacroPairsVec[k] = leftSubvector[i];
+		i++;
+		k++;
+	}
+	// copy any remaining values  right subvector to the merged vector
+	while (j < len2) {
+		ingredientChosenMacroPairsVec[k] = rightSubvector[j];
+		j++;
+		k++;
+	}
 }
