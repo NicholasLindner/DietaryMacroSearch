@@ -23,7 +23,7 @@ public:
 };
 
 Data::Data(string filename) {
-	file.open(filename);
+	file.open(filename, ios::in);
 	if (!file.is_open()) {
 		cout << "File not open!" << endl;
 	}
@@ -75,12 +75,12 @@ void Data::organizeData() {
 	}
 }
 
-vector<string> Data::heapSort(string firstMacro, string noMacro = "None") {
+vector<string> Data::heapSort(string macro, string noMacro = "None") {
 	string* heap{ new string[1882] };
 	int size = 0;
 	int indexBuild = 0;
 	int parent = floor((indexBuild - 1) / 2.0);
-	int indexMacro = find(macros.begin(), macros.end(), firstMacro) - macros.begin();
+	int indexMacro = find(macros.begin(), macros.end(), macro) - macros.begin();
 
 	//build and insert into heap
 	for (auto i : ingredients) {
@@ -89,10 +89,7 @@ vector<string> Data::heapSort(string firstMacro, string noMacro = "None") {
 		parent = floor((indexBuild - 1) / 2.0);
 
 		while (parent > - 1 && ingredients[heap[indexBuild]][indexMacro] > ingredients[heap[parent]][indexMacro]) {
-			string temp = heap[parent];
-			heap[parent] = heap[indexBuild];
-			heap[indexBuild] = temp;
-
+			swap(heap[parent], heap[indexBuild]);
 			indexBuild = parent;
 			parent = floor((indexBuild - 1) / 2.0);
 		}
@@ -121,24 +118,17 @@ vector<string> Data::heapSort(string firstMacro, string noMacro = "None") {
 
 		while (right < size && (ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[left]][indexMacro] || ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[right]][indexMacro])) {
 			if (ingredients[heap[left]][indexMacro] > ingredients[heap[right]][indexMacro]) {
-				string temp = heap[left];
-				heap[left] = heap[indexExtract];
-				heap[indexExtract] = temp;
-				indexExtract = left;
+				swap(heap[left], heap[indexExtract]);
 			}
 			else {
-				string temp = heap[right];
-				heap[right] = heap[indexExtract];
-				heap[indexExtract] = temp;
+				swap(heap[right], heap[indexExtract]);
 				indexExtract = right;
 			}
 			left = (2 * indexExtract) + 1;
 			right = (2 * indexExtract) + 2;
 		}
 		if (right == size && ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[left]][indexMacro]) {
-			string temp = heap[left];
-			heap[left] = heap[indexExtract];
-			heap[indexExtract] = temp;
+			swap(heap[left], heap[indexExtract]);
 		}
 	}
 	/*for (int i = 0; i < 200; i++) {
