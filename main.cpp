@@ -10,16 +10,16 @@ int main() {
 
     Data data("2019-2020-FNDDS-At-A-Glance-Ingredient-Nutrient-Values.csv");
     data.organizeData();
-    data.heapSort("Protein", "Carbohydrate");
-    data.mergeSort("Protein", "Carbohydrate");
+    data.heapSort("Carbohydrate", "Protein");
+    data.mergeSort("Carbohydrate", "Protein");
 
     sf::Font font;
     if (!font.loadFromFile("font.ttf")) {
         cout << "Error loading font!" << endl;
     }
     Text text;
-    sf::Text header = text.setText(font, sf::String("Dietary Macro Search :)"), 24, sf::Color::White, sf::Vector2f(width / 2.0f, height / 2.0f - 350));
-    sf::Text names = text.setText(font, sf::String("Project by Stephanie Fong, Nicholas Lindner, Matthew Rionda"), 14, sf::Color::White, sf::Vector2f(width / 2.0f, height / 2.0f - 325));
+    sf::Text header = text.setText(font, sf::String("Dietary Macro Search :)"), 24, sf::Color::White, sf::Vector2f(width / 2.0f, height / 2.0f - 350), true, false);
+    sf::Text names = text.setText(font, sf::String("Project by Stephanie Fong, Nicholas Lindner, Matthew Rionda"), 14, sf::Color::White, sf::Vector2f(width / 2.0f, height / 2.0f - 325), false, true);
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Dietary Macro Search!");
 

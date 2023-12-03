@@ -3,7 +3,6 @@
 #include <istream>
 #include <fstream>
 #include <sstream>
-#include <set>
 #include <string>
 #include <map>
 #include <vector>
@@ -19,12 +18,10 @@ public:
 	Data() {}
 	Data(string filename);
 	void organizeData();
-	vector<string> heapSort(string firstMacro, string noMacro);
-
+	vector<pair<string, float>> heapSort(string firstMacro, string noMacro);
 	vector<pair<string, float>> mergeSort(string chosenMacro, string noMacro); 
 	void mergeSortHelper(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
 	void merge(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int mid, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
-
 };
 
 Data::Data(string filename) {
@@ -38,7 +35,6 @@ void Data::organizeData() {
 	string temp, ingredientCode, ingredientDescrip, nutrientCode;
 	string nutrientDescrip, nutrientVal, nutrientValSource, fdcID;
 	string derivationCode, sfAddModYear, foundationYearAcq;
-
 	regex letters = regex("[A-Za-z]");
 
 	//reads first 3 lines
@@ -76,16 +72,16 @@ void Data::organizeData() {
 			macros.push_back(nutrientDescrip);
 		}
 		ingredients[ingredientDescrip].push_back(stof(nutrientVal));
-		//cout << ingredientDescrip << " " << macros[ingredients[ingredientDescrip].size() - 1] << " " << nutrientVal << endl;
 	}
 }
 
-vector<string> Data::heapSort(string chosenMacro, string noMacro = "None") {
+// Sorts ingredients based on chosenMacro using heap sort (Note: based off heap sort pseudocode from Module 5 slides)
+vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = "None") {
 	string* heap{ new string[1882] };
 	int size = 0;
 	int indexBuild = 0;
 	int parent = floor((indexBuild - 1) / 2.0);
-	int indexMacro = find(macros.begin(), macros.end(), firstMacro) - macros.begin();
+	int indexMacro = find(macros.begin(), macros.end(), chosenMacro) - macros.begin();
 
 	//build and insert into heap
 	for (auto i : ingredients) {
@@ -103,7 +99,7 @@ vector<string> Data::heapSort(string chosenMacro, string noMacro = "None") {
 	/*for (int i = 0; i < 1882; i++) {
 		cout << i << " " << heap[i] << " " << ingredients[heap[i]][indexMacro] << endl;
 	}*/
-	vector<string> result;
+	vector<pair<string, float>> result;
 	int indexExtract = 0;
 	int left = (2 * indexExtract) + 1;
 	int right = (2 * indexExtract) + 2;
@@ -113,7 +109,7 @@ vector<string> Data::heapSort(string chosenMacro, string noMacro = "None") {
 	//extract max from heap
 	while (size > - 1) {
 		if (noMacro == "None" || ingredients[heap[0]][indexNoMacro] == 0.00) {
-			result.push_back(heap[0]);
+			result.push_back(make_pair(heap[0], ingredients[heap[0]][indexMacro]));
 		}
 		if (size == 0) { break; }
 
@@ -124,6 +120,7 @@ vector<string> Data::heapSort(string chosenMacro, string noMacro = "None") {
 		while (right < size && (ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[left]][indexMacro] || ingredients[heap[indexExtract]][indexMacro] < ingredients[heap[right]][indexMacro])) {
 			if (ingredients[heap[left]][indexMacro] > ingredients[heap[right]][indexMacro]) {
 				swap(heap[left], heap[indexExtract]);
+				indexExtract = left;
 			}
 			else {
 				swap(heap[right], heap[indexExtract]);
@@ -137,18 +134,14 @@ vector<string> Data::heapSort(string chosenMacro, string noMacro = "None") {
 		}
 	}
 	/*for (int i = 0; i < 20; i++) {
-		cout << result[i] << " " << ingredients[result[i]][indexMacro] << " " << ingredients[result[i]][0] << endl;
-	}
-	cout << endl;
-	cout << endl;
-	cout << endl;*/
+		cout << result[i].first << " " << result[i].second << endl;
+	}*/
 	
 	return result;
 }
 
 // Sorts the ingredients with merge sort based on how much of each ingredient is wanted (and which one is unwanted)
 vector<pair<string, float>> Data::mergeSort(string chosenMacro, string noMacro = "None") {
-
 	int indexMacro = find(macros.begin(), macros.end(), chosenMacro) - macros.begin(); // finds index of the chosen macro
 	vector<pair<string, float>> ingredientChosenMacroPairsVec; // vector of pairs that contain each ingredient and the amount of the chosen macro that they contain
 
