@@ -13,12 +13,12 @@ using namespace std;
 class Data {
 	ifstream file;
 	vector<string> macros; // name of each macro (corresponds accrodingly to float vector's index)
-	map <string, vector <float>> ingredients; // name of ingredient, vector of amount of ingredient
+	map <string, vector <float>> ingredients; // name of ingredient, vector of amount of macro
 public:
 	Data() {}
 	Data(string filename);
 	void organizeData();
-	vector<pair<string, float>> heapSort(string firstMacro, string noMacro);
+	vector<pair<string, float>> heapSort(string chosenMacro, string noMacro);
 	vector<pair<string, float>> mergeSort(string chosenMacro, string noMacro); 
 	void mergeSortHelper(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
 	void merge(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int mid, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
