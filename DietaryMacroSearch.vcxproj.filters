@@ -34,5 +34,8 @@
     <ClInclude Include="Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Dropdown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,9 +19,10 @@ public:
 	Data(string filename);
 	void organizeData();
 	vector<pair<string, float>> heapSort(string chosenMacro, string noMacro);
-	vector<pair<string, float>> mergeSort(string chosenMacro, string noMacro); 
+	vector<pair<string, float>> mergeSort(string chosenMacro, string noMacro);
 	void mergeSortHelper(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
 	void merge(vector<pair<string, float>>& ingredientChosenMacroPairsVec, int left, int mid, int right); // CITATION: MERGE CODE INSPIRED BY THE PROFESSOR'S MODULE 6 SLIDES (MERGE SORT SECTION)
+	const vector<string>& getMacros() const;
 };
 
 Data::Data(string filename) {
@@ -75,6 +76,10 @@ void Data::organizeData() {
 	}
 }
 
+const vector<string>& Data::getMacros() const {
+	return macros;
+}
+
 // Sorts ingredients based on chosenMacro using heap sort (Note: based off heap sort pseudocode from Module 5 slides)
 vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = "None") {
 	string* heap{ new string[1882] };
@@ -89,7 +94,7 @@ vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = 
 		heap[indexBuild] = i.first;
 		parent = floor((indexBuild - 1) / 2.0);
 
-		while (parent > - 1 && ingredients[heap[indexBuild]][indexMacro] > ingredients[heap[parent]][indexMacro]) {
+		while (parent > -1 && ingredients[heap[indexBuild]][indexMacro] > ingredients[heap[parent]][indexMacro]) {
 			swap(heap[parent], heap[indexBuild]);
 			indexBuild = parent;
 			parent = floor((indexBuild - 1) / 2.0);
@@ -105,9 +110,9 @@ vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = 
 	int right = (2 * indexExtract) + 2;
 	int indexNoMacro;
 	noMacro == "None" ? indexNoMacro = -1 : indexNoMacro = find(macros.begin(), macros.end(), noMacro) - macros.begin();
-	
+
 	//extract max from heap
-	while (size > - 1) {
+	while (size > -1) {
 		if (noMacro == "None" || ingredients[heap[0]][indexNoMacro] == 0.00) {
 			result.push_back(make_pair(heap[0], ingredients[heap[0]][indexMacro]));
 		}
@@ -136,7 +141,7 @@ vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = 
 	/*for (int i = 0; i < 20; i++) {
 		cout << result[i].first << " " << result[i].second << endl;
 	}*/
-	
+
 	return result;
 }
 
@@ -145,7 +150,7 @@ vector<pair<string, float>> Data::mergeSort(string chosenMacro, string noMacro =
 	int indexMacro = find(macros.begin(), macros.end(), chosenMacro) - macros.begin(); // finds index of the chosen macro
 	vector<pair<string, float>> ingredientChosenMacroPairsVec; // vector of pairs that contain each ingredient and the amount of the chosen macro that they contain
 
-	int indexUnwantedMacro; 
+	int indexUnwantedMacro;
 	noMacro == "None" ? indexUnwantedMacro = -1 : indexUnwantedMacro = find(macros.begin(), macros.end(), noMacro) - macros.begin(); // finds the index of the unwanted ingredient, if there is one chosen
 
 	// iterates through all the ingredients and assigns a pair of the ingredient name and how much of the chosen macro there is contained, and pushes this pair to a vector
