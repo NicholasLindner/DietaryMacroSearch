@@ -55,20 +55,22 @@ int main() {
     sf::Text sortMethodText = text.setText(font, sf::String("Choose Sorting Method:"), 20, sf::Color::White, sf::Vector2f(0, 0), false, false, true);
     adjustDropdownTextPosition(sortMethodDropdown, sortMethodText, 20);
 
+    // Button and text for search button
     sf::RectangleShape searchButton(sf::Vector2f(200, 50));
     searchButton.setPosition(width / 2.0f - 300, height / 50 + 500);
     searchButton.setFillColor(sf::Color::White);
     sf::Text searchButtonText = text.setText(font, "Search", 20, sf::Color(32, 161, 146), sf::Vector2f(width / 2.0f - 200, height / 50 + 525), false, false, false);
 
+    // Button and text for clear button
     sf::RectangleShape clearButton(sf::Vector2f(200, 50));
     clearButton.setPosition(width / 2.0f + 100, height / 50 + 500);
     clearButton.setFillColor(sf::Color::White);
     sf::Text clearButtonText = text.setText(font, "Clear", 20, sf::Color(32, 161, 146), sf::Vector2f(width / 2.0f + 200, height / 50 + 525), false, false, false);
 
+    // Result and error text and result texture
     sf::Text resultText = text.setText(font, "", 15, sf::Color::Black, sf::Vector2f(100, height / 50 + 750), false, false, false);
     sf::RenderTexture resultTexture;
     resultTexture.create(resultArea.width, resultArea.height);
-
     sf::Text errorText = text.setText(font, "", 20, sf::Color::Black, sf::Vector2f(width / 2 - 250, 800), false, false, false);
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Dietary Macro Search!");
@@ -96,9 +98,7 @@ int main() {
             sortMethodDropdown.handleEvent(event);
 
             if (event.type == sf::Event::MouseButtonPressed) {
-
                 if (searchButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-
                     string selectedMacro1 = dropdown.getSelectedItem();
                     string selectedMacro2 = dropdown2.getSelectedItem();
                     string selectedSortMethod = sortMethodDropdown.getSelectedItem();
@@ -154,7 +154,6 @@ int main() {
                     dropdown2.clear(window);
                     sortMethodDropdown.clear(window);
                     resultText.setString("");
-
                 }
             }
 
@@ -188,6 +187,5 @@ int main() {
         window.draw(resultSprite);
         window.display();
     }
-
     return 0;
 }

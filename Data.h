@@ -101,9 +101,7 @@ vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = 
 		}
 		size++;
 	}
-	/*for (int i = 0; i < 1882; i++) {
-		cout << i << " " << heap[i] << " " << ingredients[heap[i]][indexMacro] << endl;
-	}*/
+
 	vector<pair<string, float>> result;
 	int indexExtract = 0;
 	int left = (2 * indexExtract) + 1;
@@ -138,10 +136,6 @@ vector<pair<string, float>> Data::heapSort(string chosenMacro, string noMacro = 
 			swap(heap[left], heap[indexExtract]);
 		}
 	}
-	/*for (int i = 0; i < 20; i++) {
-		cout << result[i].first << " " << result[i].second << endl;
-	}*/
-
 	return result;
 }
 
@@ -172,11 +166,6 @@ vector<pair<string, float>> Data::mergeSort(string chosenMacro, string noMacro =
 
 	// Calls the actual sorting mergesort algorithm 
 	mergeSortHelper(ingredientChosenMacroPairsVec, left, right);
-
-	/*for (int i = 0; i < 20; i++) {
-		cout << ingredientChosenMacroPairsVec[i].first << " " << ingredientChosenMacroPairsVec[i].second << " "  << endl;
-	}*/
-
 	return ingredientChosenMacroPairsVec;
 }
 
