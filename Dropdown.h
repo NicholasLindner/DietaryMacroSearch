@@ -16,7 +16,7 @@ class Dropdown {
 	int scrollOffset;
 	int maxDisplayItems;
 public:
-	Dropdown(float width, float height, const vector<string>& macros) : width(width), height(height), selectedItemIndex(-1), isExpanded(false), scrollOffset(0), maxDisplayItems(5) {
+	Dropdown(float width, float height, const vector<string>& macros) : width(width), height(height), selectedItemIndex(-1), isExpanded(false), scrollOffset(0), maxDisplayItems(3) {
 		box.setSize(sf::Vector2f(width, height));
 		box.setFillColor(sf::Color::White);
 		box.setOutlineColor(sf::Color::Black);
@@ -25,7 +25,7 @@ public:
 		box.setPosition(sf::Vector2f(100, 400));
 
 		if (!font.loadFromFile("font.ttf")) {
-			cout << "error loading font in Dropdown!" << endl;
+			cout << "Error loading font in Dropdown!" << endl;
 		}
 
 		for (const auto& macro : macros) {
@@ -42,12 +42,13 @@ public:
 
 		sf::Text text;
 		text.setFont(font);
-		text.setCharacterSize(40);
+		text.setCharacterSize(20);
 		text.setFillColor(sf::Color::Black);
 
 		if (selectedItemIndex >= 0 && !isExpanded) {
 			text.setString(items[selectedItemIndex]);
-			text.setPosition(box.getPosition());
+			text.setPosition(sf::Vector2f(box.getPosition().x, box.getPosition().y + 10.5));
+			//text.setPosition(box.getPosition());
 			window.draw(text);
 		}
 
@@ -60,6 +61,11 @@ public:
 				++displayCount;
 			}
 		}
+	}
+
+	void clear (sf::RenderWindow& window){
+		window.draw(box);
+		selectedItemIndex = -1;
 	}
 
 	void handleEvent(const sf::Event& event) {

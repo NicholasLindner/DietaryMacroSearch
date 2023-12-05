@@ -5,7 +5,7 @@ using namespace std;
 struct Text {
 	Text() {}
 
-	sf::Text setText(sf::Font& font, sf::String message, int size, sf::Color color, sf::Vector2f position, bool bold, bool italic) {
+	sf::Text setText(sf::Font& font, sf::String message, int size, sf::Color color, sf::Vector2f position, bool bold, bool italic, bool underlined) {
 		sf::Text text;
 		text.setFont(font);
 		text.setString(message);
@@ -16,6 +16,7 @@ struct Text {
 		text.setPosition(position);
 		if (bold) { text.setStyle(sf::Text::Bold); }
 		if (italic) { text.setStyle(sf::Text::Italic); }
+		if (underlined) { text.setStyle(sf::Text::Underlined); }
 		return text;
 	}
 };
