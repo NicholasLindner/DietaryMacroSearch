@@ -23,28 +23,30 @@ int main() {
     const int MAX_RESULT_LINES = 20;
     sf::FloatRect resultArea(10, 600, width - 20, MAX_RESULT_LINES * lineHeight);
   
+    // Create data object
     Data data("2019-2020-FNDDS-At-A-Glance-Ingredient-Nutrient-Values.csv");
     data.organizeData();
 
+    // Get font
     sf::Font font;
     if (!font.loadFromFile("font.ttf")) {
         cout << "Error loading font!" << endl;
     }
+
+    // Create text object and instantiate project title and team members text
     Text text;
     sf::Text header = text.setText(font, sf::String("Dietary Macro Search!"), 40, sf::Color::White, sf::Vector2f(width / 2.0f, height / 50 + 20), true, false, false);
     sf::Text names = text.setText(font, sf::String("Project by Stephanie Fong, Nicholas Lindner, Matthew Rionda"), 20, sf::Color::White, sf::Vector2f(width / 2.0f, height / 50 + 75), false, true, false);
 
+    // Macro dropdown
     Dropdown dropdown(300, 50, data.getMacros());
     dropdown.setPosition(width / 2.0f - 350, height / 50 + 150);
-
-    Dropdown dropdown2(300, 50, data.getMacros());
-    dropdown2.setPosition(width / 2.0f + 50, height / 50 + 150);
-
-    // Text for the first dropdown
     sf::Text dropdownOne = text.setText(font, sf::String("Choose a Macro:"), 20, sf::Color::White, sf::Vector2f(0, 0), false, false, true);
     adjustDropdownTextPosition(dropdown, dropdownOne, 20);
 
-    // Text for the second dropdown
+    // Don't include macro dropdown
+    Dropdown dropdown2(300, 50, data.getMacros());
+    dropdown2.setPosition(width / 2.0f + 50, height / 50 + 150);
     sf::Text dropdownTwo = text.setText(font, sf::String("Don't include Macro (optional):"), 20, sf::Color::White, sf::Vector2f(0, 0), false, false, true);
     adjustDropdownTextPosition(dropdown2, dropdownTwo, 20);
 
@@ -73,6 +75,7 @@ int main() {
     resultTexture.create(resultArea.width, resultArea.height);
     sf::Text errorText = text.setText(font, "", 20, sf::Color::Black, sf::Vector2f(width / 2 - 250, 800), false, false, false);
 
+    // Window
     sf::RenderWindow window(sf::VideoMode(width, height), "Dietary Macro Search!");
     sf::Event event;
 

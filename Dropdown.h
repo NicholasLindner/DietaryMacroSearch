@@ -48,7 +48,6 @@ public:
 		if (selectedItemIndex >= 0 && !isExpanded) {
 			text.setString(items[selectedItemIndex]);
 			text.setPosition(sf::Vector2f(box.getPosition().x, box.getPosition().y + 10.5));
-			//text.setPosition(box.getPosition());
 			window.draw(text);
 		}
 
