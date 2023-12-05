@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp> 
 #include <iomanip>
+#include <chrono>
 #include "Text.h"
 #include "Data.h"
 #include "Dropdown.h"
@@ -112,10 +113,18 @@ int main() {
                         errorText.setString("");
 
                         if (selectedSortMethod == "Heap") {
+                            auto starttime = chrono::high_resolution_clock::now();
                             results = data.heapSort(selectedMacro1, selectedMacro2);
+                            auto stoptime = chrono::high_resolution_clock::now();
+                            int total = chrono::duration_cast<chrono::nanoseconds>(stoptime - starttime).count();
+                            cout << "Heap sort runtime: " << total << " nanoseconds" << endl;
                         }
                         else if (selectedSortMethod == "Merge") {
+                            auto starttime = chrono::high_resolution_clock::now();
                             results = data.mergeSort(selectedMacro1, selectedMacro2);
+                            auto stoptime = chrono::high_resolution_clock::now();
+                            int total = chrono::duration_cast<chrono::nanoseconds>(stoptime - starttime).count();
+                            cout << "Merge sort runtime: " << total << " nanoseconds" << endl;
                         }
 
                         stringstream resultStream;
