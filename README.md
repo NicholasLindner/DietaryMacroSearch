@@ -11,7 +11,6 @@
 4. [Usage](#usage)
 5. [Dataset](#dataset)
 6. [Recipes](#recipes)
-7. [Installation](#installation)
 
 ---
 
